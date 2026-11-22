@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MAT-117 · Desafío final · Matemáticas para La Paz</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="portada">
+    <p class="etiqueta">MAT-117 · Computación Científica · Gestión 2026-II</p>
+    <h1>Matemáticas para resolver problemas reales de La Paz</h1>
+    <p class="integrantes">Integrantes: Marcelo Sebastián Tudela Toro · [Integrante 2]</p>
+    <nav aria-label="Secciones">
+      <a href="#huerto">Reto D · Huerto</a>
+      <a href="#solar">Reto C · Panel solar</a>
+      <a href="#conclusiones">Conclusiones</a>
+      <a href="#defensa">Defensa</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Objetivo y materias integradas</h2>
+      <p>Transformamos dos situaciones cotidianas de La Paz en modelos matemáticos sencillos, los programamos en JavaScript y verificamos cada resultado con una comprobación independiente.</p>
+      <ul class="chips">
+        <li><b>Cálculo I:</b> derivada y máximo de $A(x)$; tasa de cambio de $E(\theta)$.</li>
+        <li><b>Álgebra:</b> sustituir y despejar ($y = 20 - x$; $\theta = \arccos r$).</li>
+        <li><b>Geometría I:</b> perímetro y área del rectángulo; ángulo entre el panel y el sol.</li>
+        <li><b>Heurística:</b> conjeturar, ensayar varios valores y verificar o refutar.</li>
+      </ul>
+    </section>
+
+    <!-- ======================= RETO D ======================= -->
+    <section id="huerto">
+      <h2>Reto D · Diseñemos un huerto urbano óptimo</h2>
+
+      <h3>1. Problema y objetivo</h3>
+      <p>Una familia de La Paz dispone de un tramo de cerco de $P = 40$ m y quiere encerrar un huerto rectangular con la mayor área de cultivo posible. <b>Objetivo:</b> hallar las dimensiones que maximizan el área.</p>
+
+      <table class="vars">
+        <caption>Variables y unidades</caption>
+        <thead><tr><th>Símbolo</th><th>Significado</th><th>Unidad</th></tr></thead>
+        <tbody>
+          <tr><td>$P$</td><td>Longitud total del cerco (perímetro)</td><td>m</td></tr>
+          <tr><td>$x$</td><td>Largo del huerto</td><td>m</td></tr>
+          <tr><td>$y$</td><td>Ancho del huerto</td><td>m</td></tr>
+          <tr><td>$A$</td><td>Área cultivable</td><td>m²</td></tr>
+        </tbody>
+      </table>
+
+      <h3>2. Modelo matemático</h3>
+      <div class="modelo">
+        <p><b>Geometría:</b> perímetro $2(x+y) = P$ y área $A = x\,y$.</p>
+        <p><b>Álgebra (despejar $y$):</b> $y = \dfrac{P}{2} - x$; con $P=40$: $y = 20 - x$.</p>
+        <p><b>Función a maximizar:</b> $A(x) = x\left(\dfrac{P}{2} - x\right)$, con $0 < x < \dfrac{P}{2}$ (con $P=40$: $A(x)=x(20-x)$).</p>
+        <p><b>Cálculo:</b> $A'(x) = \dfrac{P}{2} - 2x$. Se anula en $x^* = \dfrac{P}{4}$, y como $A''(x) = -2 < 0$ es un <b>máximo</b>. Entonces $y^* = x^* = P/4$ y $A^* = P^2/16$ (con $P=40$: $x^*=10$ m, $A^*=100$ m²).</p>
+      </div>
+
+      <h3>3. Calculadora</h3>
+      <form id="form-huerto" novalidate>
+        <label>Cerco total $P$ (m)
+          <input id="h-cerco" type="number" step="any" value="40" required>
+        </label>
+        <label>Escenario A: largo $x$ (m)
+          <input id="h-x1" type="number" step="any" value="5" required>
+        </label>
+        <label>Escenario B: largo $x$ (m)
+          <input id="h-x2" type="number" step="any" value="10" required>
+        </label>
+        <div class="botones">
+          <button type="submit">Calcular</button>
+          <button type="reset" class="sec">Restablecer</button>
+        </div>
+      </form>
+      <p id="h-error" class="error" role="alert" hidden></p>
+
+      <div id="h-resultados" hidden>
+        <h3>4. Resultados: comparación de dos escenarios</h3>
+        <div class="scroll">
+          <table id="h-comparacion">
+            <thead><tr><th></th><th>Largo $x$ (m)</th><th>Ancho $y$ (m)</th><th>Perímetro (m)</th><th>Área (m²)</th><th>% del máximo</th><th>Tendencia de $A$</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p id="h-veredicto" class="veredicto"></p>
+
+        <h3>5. Comprobación independiente</h3>
+        <ul id="h-comprobacion" class="comprobacion"></ul>
+
+        <h3>6. Tabla experimental (7 pruebas)</h3>
+        <div class="scroll">
+          <table id="tabla-huerto">
+            <thead><tr><th>$x$ (m)</th><th>$y$ (m)</th><th>$2(x+y)$ (m)</th><th>$A$ (m²)</th><th>% del máx.</th><th>$A'(x)$</th><th>Tendencia</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3>7. Conjetura y comprobación (Heurística)</h3>
+      <div class="conjetura">
+        <p><b>Conjetura.</b> «Entre todos los rectángulos con el mismo perímetro, el de mayor área es el cuadrado».</p>
+        <p><b>Ensayo.</b> Con $x = 2, 5, 8, 10, 12, 15, 18$ el área crece hasta $x=10$ (100 m²) y luego decrece. Las áreas son simétricas: $A(8)=A(12)=96$ y $A(5)=A(15)=75$, porque intercambiar $x$ e $y$ no cambia el rectángulo.</p>
+        <p><b>Verificación.</b> $A'(x)=20-2x$ cambia de signo en $x=10$ y $A''<0$. Otra forma: $A(x) = 100 - (x-10)^2 \le 100$, con igualdad solo si $x=10$. <b>La conjetura se verifica.</b></p>
+      </div>
+    </section>
+
+    <!-- ======================= RETO C ======================= -->
+    <section id="solar">
+      <h2>Reto C · ¿Dónde colocar un panel solar?</h2>
+
+      <h3>1. Problema y objetivo</h3>
+      <p>En La Paz la radiación solar es alta por la altitud. Un panel de potencia $P_w$ se inclina respecto de la posición ideal (perpendicular a los rayos del sol). <b>Objetivo:</b> estimar cuánta energía se pierde al desviar el panel y hasta qué ángulo conviene tolerar la desviación.</p>
+
+      <table class="vars">
+        <caption>Variables y unidades</caption>
+        <thead><tr><th>Símbolo</th><th>Significado</th><th>Unidad</th></tr></thead>
+        <tbody>
+          <tr><td>$P_w$</td><td>Potencia nominal del panel</td><td>W</td></tr>
+          <tr><td>$h$</td><td>Horas de sol equivalentes al día</td><td>h</td></tr>
+          <tr><td>$\theta$</td><td>Ángulo de desviación respecto de la posición ideal</td><td>grados (°)</td></tr>
+          <tr><td>$E$</td><td>Energía diaria estimada</td><td>Wh (1 kWh = 1000 Wh)</td></tr>
+          <tr><td>$r$</td><td>Fracción mínima de energía que se desea conservar</td><td>% (o fracción)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>2. Modelo matemático (didáctico)</h3>
+      <div class="modelo">
+        <p><b>Geometría:</b> $\theta$ es el ángulo entre la normal del panel y la dirección del sol. Solo la componente de la radiación perpendicular al panel produce energía, y esa componente es proporcional a $\cos\theta$.</p>
+        <p><b>Modelo:</b> $E(\theta) = P_w\,h\,\cos\theta$, con $0^\circ \le \theta \le 90^\circ$. Para $\theta = 0^\circ$ resulta $E_0 = P_w h$.</p>
+        <p><b>Cálculo:</b> $\dfrac{dE}{d\theta} = -P_w h\,\sin\theta \le 0$ (con $\theta$ en radianes): la energía nunca aumenta al desviar el panel. Cerca de $0^\circ$, $\cos\theta \approx 1 - \theta^2/2$, así que las primeras desviaciones casi no cuestan.</p>
+        <p><b>Álgebra (despejar $\theta$):</b> si se quiere $E \ge r\,E_0$, entonces $\cos\theta \ge r$, es decir $\theta \le \arccos r$.</p>
+      </div>
+
+      <h3>3. Calculadora</h3>
+      <form id="form-solar" novalidate>
+        <label>Potencia $P_w$ (W)
+          <input id="s-pot" type="number" step="any" value="300" required>
+        </label>
+        <label>Horas de sol $h$ (h)
+          <input id="s-horas" type="number" step="any" value="5.5" required>
+        </label>
+        <label>Escenario A: $\theta$ (°)
+          <input id="s-t1" type="number" step="any" value="0" required>
+        </label>
+        <label>Escenario B: $\theta$ (°)
+          <input id="s-t2" type="number" step="any" value="30" required>
+        </label>
+        <label>Energía mínima deseada $r$ (% de $E_0$)
+          <input id="s-r" type="number" step="any" value="90" required>
+        </label>
+        <div class="botones">
+          <button type="submit">Calcular</button>
+          <button type="reset" class="sec">Restablecer</button>
+        </div>
+      </form>
+      <p id="s-error" class="error" role="alert" hidden></p>
+
+      <div id="s-resultados" hidden>
+        <h3>4. Resultados: comparación de dos escenarios</h3>
+        <div class="scroll">
+          <table id="s-comparacion">
+            <thead><tr><th></th><th>Ángulo $\theta$</th><th>$E$ (Wh)</th><th>$E$ (kWh)</th><th>% de $E_0$</th><th>Pérdida (Wh)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p id="s-veredicto" class="veredicto"></p>
+
+        <h3>5. Comprobación independiente</h3>
+        <ul id="s-comprobacion" class="comprobacion"></ul>
+
+        <h3>6. Tabla experimental (8 pruebas)</h3>
+        <div class="scroll">
+          <table id="tabla-solar">
+            <thead><tr><th>$\theta$</th><th>$\cos\theta$</th><th>$E$ (Wh)</th><th>% de $E_0$</th><th>Pérdida (Wh)</th><th>$dE/d\theta$ (Wh/°)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3>7. Conjetura y comprobación (Heurística)</h3>
+      <div class="conjetura">
+        <p><b>Conjetura.</b> «Una desviación de hasta $10^\circ$ respecto de la posición ideal pierde menos del $2\,\%$ de la energía; en cambio, a $30^\circ$ la pérdida ya supera el $10\,\%$».</p>
+        <p><b>Ensayo.</b> Con $P_w=300$ W y $h=5{,}5$ h ($E_0=1650$ Wh): a $10^\circ$ la producción es $1624{,}9$ Wh (pérdida $1{,}52\,\%$); a $30^\circ$ es $1428{,}9$ Wh (pérdida $13{,}4\,\%$); a $60^\circ$ cae a $825$ Wh; a $90^\circ$ es $0$.</p>
+        <p><b>Verificación.</b> $1-\cos 10^\circ = 0{,}0152 < 0{,}02$ y $1-\cos 30^\circ = 0{,}134 > 0{,}10$. También $\arccos(0{,}98)\approx 11{,}5^\circ$ y $\arccos(0{,}90)\approx 25{,}8^\circ$. <b>La conjetura se verifica.</b></p>
+      </div>
+    </section>
+
+    <!-- ======================= CONCLUSIONES ======================= -->
+    <section id="conclusiones">
+      <h2>Conclusiones</h2>
+      <ul>
+        <li><b>Huerto:</b> con 40 m de cerco, el máximo es el cuadrado de $10 \times 10$ m con $100$ m². Un huerto de $5 \times 15$ m solo alcanza $75$ m², el 75 % del máximo, con el mismo cerco.</li>
+        <li><b>Panel solar:</b> la pérdida crece lentamente al inicio (≈ 1,5 % a $10^\circ$) y rápido después (13,4 % a $30^\circ$; 50 % a $60^\circ$). Para conservar el 90 % de la energía basta una desviación menor a $\approx 25{,}8^\circ$.</li>
+        <li><b>Límites del modelo:</b> el huerto supone terreno plano, forma rectangular y cerco sin puertas ni esquinas especiales. El panel solar supone cielo despejado, horas de sol constantes, sin sombras, nubes, temperatura ni eficiencia del inversor; en la realidad el sol cambia de posición durante el día y el año.</li>
+      </ul>
+    </section>
+
+    <!-- ======================= DEFENSA ======================= -->
+    <section id="defensa">
+      <h2>Preguntas de defensa</h2>
+      <details open>
+        <summary>¿Qué representa cada variable?</summary>
+        <p>Huerto: $P$ es el cerco total (m), $x$ el largo (m), $y$ el ancho (m) y $A$ el área (m²). Panel: $P_w$ es la potencia (W), $h$ las horas de sol (h), $\theta$ la desviación (°), $E$ la energía diaria (Wh) y $r$ la fracción mínima que se quiere conservar.</p>
+      </details>
+      <details>
+        <summary>¿Cómo comprobaron el resultado de JavaScript?</summary>
+        <p>Cada cálculo se contrasta con un método distinto: (i) barrido numérico de 4000 puntos de $A(x)$ frente a la fórmula $x^*=P/4$; (ii) derivada analítica frente a diferencias centrales; (iii) $\cos\theta$ de <code>Math.cos</code> frente a su serie de Taylor; (iv) al despejar $\theta=\arccos r$ y volver a evaluar, se recupera $r$. Además, se hicieron a mano los casos $x=10$ ($A=100$) y $\theta=60^\circ$ ($E=E_0/2$).</p>
+      </details>
+      <details>
+        <summary>¿Qué conjetura probaron?</summary>
+        <p>Huerto: «el rectángulo de mayor área con perímetro fijo es el cuadrado». Panel: «hasta $10^\circ$ de desviación la pérdida es menor al 2 %, y a $30^\circ$ supera el 10 %». Ambas se verificaron con las tablas y con el cálculo.</p>
+      </details>
+      <details>
+        <summary>¿Qué cambia al modificar un dato?</summary>
+        <p>Huerto: si cambia $P$, el óptimo se mueve a $x^*=P/4$ y el área máxima crece con $P^2$ (duplicar el cerco cuadruplica el área). Si se aleja $x$ de $P/4$ el área baja de forma simétrica. Panel: $E$ es proporcional a $P_w$ y a $h$ (duplicar cualquiera duplica $E$), pero la <i>fracción</i> $E/E_0=\cos\theta$ no depende de ellos, solo del ángulo.</p>
+      </details>
+      <details>
+        <summary>¿Qué limitaciones tiene su modelo respecto al problema real?</summary>
+        <p>Huerto: terreno plano y rectangular, sin considerar sol y sombra, accesos, tipo de suelo ni pendiente de las laderas paceñas. Panel: usa solo $\cos\theta$ (sin radiación difusa, nubes, polvo, temperatura, ni la trayectoria del sol durante el día y las estaciones) y asume $h$ constante.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <p>MAT-117 · Computación Científica · UMSA · Código: <code>index.html</code>, <code>style.css</code>, <code>script.js</code> · El documento LaTeX del informe acompaña esta entrega.</p>
+  </footer>
+
+  <!-- Matemáticas en pantalla: MathJax (si no hay internet, el texto sigue siendo legible) -->
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$']] } };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</body>
+</html>
