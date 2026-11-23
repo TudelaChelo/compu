@@ -1,0 +1,136 @@
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #222;
+  background: #f4f4f4;
+  margin: 0;
+}
+
+header {
+  background: #1f3a5f;
+  color: white;
+  text-align: center;
+  padding: 24px 12px;
+}
+
+header nav a {
+  color: white;
+  margin: 0 8px;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+section {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+
+h2 { color: #1f3a5f; border-bottom: 3px solid #c8821e; }
+h3 { color: #1f3a5f; }
+
+.modelo {
+  background: #e8eef6;
+  border-left: 5px solid #1f3a5f;
+  padding: 4px 14px;
+}
+
+.conjetura {
+  background: #fbf1e0;
+  border-left: 5px solid #c8821e;
+  padding: 4px 14px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8px 0;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+  text-align: right;
+}
+
+th {
+  background: #1f3a5f;
+  color: white;
+  text-align: center;
+}
+
+.scroll { overflow-x: auto; }
+.optimo td { background: #dff0e0; font-weight: bold; }
+
+form {
+  background: #fafafa;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+input {
+  display: block;
+  padding: 6px;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 260px;
+}
+
+button {
+  padding: 8px 18px;
+  font-size: 1rem;
+  background: #1f3a5f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.sec { background: #888; }
+
+.error {
+  background: #fdecea;
+  color: #b3261e;
+  padding: 8px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.veredicto {
+  background: #eef7ee;
+  border-left: 5px solid #2e7d32;
+  padding: 8px 12px;
+  font-weight: bold;
+}
+
+.comprobacion li.ok::marker { content: "✔ "; color: #2e7d32; }
+.comprobacion li.mal::marker { content: "✘ "; color: #b3261e; }
+
+details {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin: 8px 0;
+}
+
+summary { cursor: pointer; font-weight: bold; color: #1f3a5f; }
+
+footer {
+  text-align: center;
+  color: #666;
+  font-size: 0.85rem;
+  padding: 16px;
+}
